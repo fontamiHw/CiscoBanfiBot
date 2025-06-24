@@ -24,7 +24,7 @@ y = loss
 fig, ax = plt.subplots()
 ax.plot(x, y)
 
-ax.set(xlabel="Location (km)", ylabel="Magnitude (dB)", title="data1")
+ax.set(xlabel="Location (km)", ylabel="Magnitude (dB)", title="sample-340.svg")
 ax.grid()
 
 fig.savefig(save_route+"sample-340.svg", format="svg")
@@ -49,7 +49,7 @@ def find_keyevents(data):
                 event.append( ke[eventId])
 
 
-titledata = datafile["filename"]
+#titledata = datafile["filename"]
 
 find_keyevents(datafile)
 #print(event)
