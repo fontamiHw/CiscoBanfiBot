@@ -23,12 +23,9 @@ y = loss
 
 fig, ax = plt.subplots()
 ax.plot(x, y)
-
-ax.set(xlabel="Location (km)", ylabel="Magnitude (dB)", title="sample-340.svg")
 ax.grid()
 
-fig.savefig(save_route+"sample-340.svg", format="svg")
-plt.show()
+ax.set(xlabel="Location (km)", ylabel="Magnitude (dB)", title="sample-340.svg")
 
 ######### FILE 2
 filename = "metadata_sor.sor"
@@ -55,8 +52,8 @@ find_keyevents(datafile)
 #print(event)
 
 #inizialise a list for each value in event
-type = []
-distance = []
+type = [] 
+distance = []  
 slope = []
 splice_loss = []
 refl_loss = []
@@ -78,3 +75,16 @@ for el in event:
     end_of_curr.append(el["end of curr"])
     start_of_next.append(el["start of next"])
     peak.append(el["peak"])
+
+i = 1
+for el in distance:
+    valx = float(el)
+    x2 = [valx, valx]
+    y2 = [0, 50]
+
+    ax.plot(x2, y2, color="red", linewidth=0.5)
+    plt.text(valx, 50, "Event "+str(i))
+    i+=1
+
+fig.savefig(save_route+"sample-340.svg", format="svg")
+plt.show()
