@@ -1,25 +1,29 @@
 import json
 import matplotlib.pyplot as plt
-fig, ax = plt.subplots()
+
 
 class Sor_plot(object):
     def __init__(self):
-        self.open_route = "C:/otdr_data/SOR/"
-        self.save_route = "C:/otdr_data/SVG/"
-        self.filename1 = "sample-340.sor"
+        self.open_route = "/data/host/SOR/"
+        self.save_route_svg = "/data/host/SVG/"
+        self.save_route_jpg= "/data/host/JPG/"
         self.filename2 = "metadata_sor.sor"
         self.data = None
+        self.ax = plt.subplots()
     
     def convert_json(self, filename):
         return filename.replace(".sor", ".json")
         
-    def save_svg(self):
-        fig.savefig(self.save_route+"sample-340.svg", format="svg")
-        plt.show()
+    def save_svg(self, filename:str):
+        svg_filename = self.save_route_svg+filename.replace(".sor", ".svg")
+        self.ax.savefig(svg_filename, format="svg")
+        self.ax.savefig(self.save_route_jpg+filename.replace(".sor", ".jpg"), format="jpg")
+        return svg_filename
+        # plt.show()
         
-    ## FILE 1
-    def exec_file1(self):
-        with open(self.open_route + self.convert_json(self.filename1), 'r') as file:
+    ## Graph
+    def plot_graph(self, sor_file:str):
+        with open(self.open_route + self.convert_json(sor_file), 'r') as file:
             self.data = json.load(file)
 
         km = []
@@ -29,11 +33,12 @@ class Sor_plot(object):
             km.append(el["km"])
             loss.append(el["loss"])
 
-        ax.plot(km, loss)
-        ax.grid()
-        ax.set(xlabel="Location (km)", ylabel="Magnitude (dB)", title="sample-340.svg")
+        self.ax.plot(km, loss)
+        self.ax.grid()
+        self.ax.set(xlabel="Location (km)", ylabel="Magnitude (dB)", title=sor_file)
+        return self.save_svg(sor_file)
 
-    ## FILE 2
+    ## Event
     def exec_file2(self):
         with open(self.open_route + self.convert_json(self.filename2), 'r') as file:
             self.data = json.load(file)
@@ -52,13 +57,7 @@ class Sor_plot(object):
             x = [valx, valx]
             y = [0, 50]
 
-            ax.plot(x, y, color="red", linewidth=0.5)
+            self.ax.plot(x, y, color="red", linewidth=0.5)
             i+=1
             plt.text(valx, 50, "Event "+str(i))
             
-### MAIN ##################################################
-
-plot = Sor_plot()
-plot.exec_file1()
-plot.exec_file2()
-plot.save_svg()

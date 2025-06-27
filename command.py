@@ -40,10 +40,11 @@ class CommandImage(Command):
         self.sor_plot = Sor_plot
 
     def execute(self, message, attachment_actions:Message, activity):    
+        print(f"-{message}-")
         #self.thread = threading.Thread(target=self.run, args=(MessageData(attachment_actions.roomId, message),))
         #self.stop_event = threading.Event()
         #self.thread.start()
-        return quote_info("Processing SOR")
+        return quote_info(f"Processing SOR {message}")
 
 
     def run(self, message_data: MessageData):
@@ -52,6 +53,6 @@ class CommandImage(Command):
         jpg_file2 = []
         for file in files:
             logging.info(f"processing file: '{file}' !!!!!!!!!!!!!!!!!!!!!")
-            jpg_file2.append(self.plot_sor.create_image_of(file))
+            jpg_file2.append(self.sor_plot.create_image_of(file))
             roomId=message_data.getRoomId()
             self.api.messages.create(roomId=roomId, files=jpg_file2)  
