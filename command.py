@@ -10,7 +10,6 @@ import threading
 
 class MessageData(object):
 
-
     def __init__(self, roomId:str, message:str):
         logging.info(f"received message: {message} for roomId: {roomId}")
         self.message = message
@@ -18,7 +17,6 @@ class MessageData(object):
 
 
     def getMessage(self) :
-        # ['/app/host/JPG//Mik_Node-S-D01-TX-20250528-091512.jpg']
         ret=[]
         ret.append(self.message.strip())
         return ret
@@ -38,7 +36,13 @@ class CommandImage(Command):
         self.api = api
 
     def execute(self, message, attachment_actions:Message, activity):    
-        print(f"-{message}-")
+        logging.info(f"-{message}-")
+        messageElem = message.strip().split()
+        logging.info(f"-{messageElem}-")
+        if messageElem:
+            message = messageElem[-1]
+        logging.info(f" NUOVO !!!!!!!!!!!!!!!!!!!!!!!!!-{message}-")
+
         self.thread = threading.Thread(target=self.run, args=(MessageData(attachment_actions.roomId, message),))
         self.stop_event = threading.Event()
         self.thread.start()
