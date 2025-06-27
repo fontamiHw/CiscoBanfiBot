@@ -9,7 +9,6 @@ class BanfiBot(object):
         print("ingresso costruttore")
         #create a Config object
         self.configuration=Config()
-        self.command=CommandImage()
         self.bot = WebexBot(teams_bot_token=self.configuration.get_token(),
                    #approved_domains=['cisco.com'],
                    approved_rooms=['b69a0c50-3fa8-11f0-b7d6-5d17b726561b'],
@@ -18,7 +17,7 @@ class BanfiBot(object):
                    proxies=self.configuration.get_proxies())
         token = self.configuration.get_token()
         self.api = WebexAPI(access_token=token)
-        self.bot.add_command(CommandImage())
+        self.bot.add_command(CommandImage(self.api))
         
         
 

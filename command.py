@@ -13,8 +13,6 @@ class MessageData(object):
 
     def __init__(self, roomId:str, message:str):
         logging.info(f"received message: {message} for roomId: {roomId}")
-        message = message.replace(".sor", ".json")
-        logging.info(f"converted message: '{message}' !!!!!!!!!!!!!!!!!!!!!!!!!")
         self.message = message
         self.roomId = roomId
 
@@ -31,19 +29,19 @@ class MessageData(object):
 
 class CommandImage(Command):
 
-    def __init__(self):
+    def __init__(self, api:WebexTeamsAPI):
         command = "sor"
         super().__init__(
             command_keyword=command,
             help_message=f"{command}: Return the plot image of the giving SOR file.",
         )
-        self.sor_plot = Sor_plot
+        self.api = api
 
     def execute(self, message, attachment_actions:Message, activity):    
         print(f"-{message}-")
-        #self.thread = threading.Thread(target=self.run, args=(MessageData(attachment_actions.roomId, message),))
-        #self.stop_event = threading.Event()
-        #self.thread.start()
+        self.thread = threading.Thread(target=self.run, args=(MessageData(attachment_actions.roomId, message),))
+        self.stop_event = threading.Event()
+        self.thread.start()
         return quote_info(f"Processing SOR {message}")
 
 
@@ -53,6 +51,6 @@ class CommandImage(Command):
         jpg_file2 = []
         for file in files:
             logging.info(f"processing file: '{file}' !!!!!!!!!!!!!!!!!!!!!")
-            jpg_file2.append(self.sor_plot.create_image_of(file))
+            jpg_file2.append(Sor_plot(file).plot_graph())
             roomId=message_data.getRoomId()
             self.api.messages.create(roomId=roomId, files=jpg_file2)  
