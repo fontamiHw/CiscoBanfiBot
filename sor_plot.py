@@ -48,8 +48,6 @@ class Sor_plot(object):
                 plt.annotate(ml, (frequencies[i], powers[i]))
 
 
-        # Set the size of the plot
-        #plt.gcf().set_size_inches(10, 6)
         # Set the size of the window
         manager = plt.get_current_fig_manager()
         #manager.window.state('zoomed')
